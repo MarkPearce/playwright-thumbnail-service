@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SlideHeaderProps {
   title: string;
   subtitle?: string;
@@ -7,12 +5,12 @@ interface SlideHeaderProps {
   className?: string;
 }
 
-export const SlideHeader: React.FC<SlideHeaderProps> = ({
+export const SlideHeader = ({
   title,
   subtitle,
   showLogo = false,
   className = ""
-}) => {
+}: SlideHeaderProps) => {
   return (
     <div className={`flex flex-col justify-start items-start ${className}`} data-slide-header>
       {showLogo && (

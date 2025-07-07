@@ -1,7 +1,6 @@
-import React from 'react';
 import { TemplateDefinition } from './types';
-import { SlideContainer, ImageContainer } from './shared';
-import { SLIDE_STYLES } from './shared/slideStyles';
+import { SlideContainer, ImageContainer } from './shared/index.js';
+import { SLIDE_STYLES } from './shared/slideStyles.js';
 
 export const TitleSlide: TemplateDefinition = {
   id: 'title_slide',

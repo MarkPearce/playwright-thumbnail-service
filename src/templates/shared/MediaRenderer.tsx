@@ -1,13 +1,16 @@
-import React from 'react';
-import { MediaItem } from '@/types/slide';
-import { content } from './slideStyles';
+import { content } from './slideStyles.js';
+
+interface MediaItem {
+  component: string;
+  props?: any;
+}
 
 interface MediaRendererProps {
   media: MediaItem;
 }
 
-export const MediaRenderer: React.FC<MediaRendererProps> = ({ media }) => {
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
+export const MediaRenderer = ({ media }: MediaRendererProps) => {
+  const handleImageError = (event: any) => {
     const img = event.currentTarget;
     console.error(`❌ Failed to load image: ${img.src}`);
     
@@ -147,7 +150,7 @@ export const MediaRenderer: React.FC<MediaRendererProps> = ({ media }) => {
             // Custom table styling to ensure readability
             '--tw-prose-th-color': '#374151',
             '--tw-prose-td-color': '#4b5563',
-          } as React.CSSProperties}
+          } as any}
         />
         {tableProps.caption && (
           <div className={`${content.media.caption.base} ${content.media.caption.responsive}`}>

@@ -1,6 +1,5 @@
-import React from 'react';
-import { getSlideColumnClasses } from './slideStyleUtils';
-import { ContentRenderer } from './ContentRenderer';
+import { getSlideColumnClasses } from './slideStyleUtils.js';
+import { ContentRenderer } from './ContentRenderer.js';
 
 interface ResolvedContentColumnProps {
   resolvedContent?: any;
@@ -9,12 +8,11 @@ interface ResolvedContentColumnProps {
   columnId: string;
 }
 
-export const ResolvedContentColumn: React.FC<ResolvedContentColumnProps> = ({ 
+export const ResolvedContentColumn = ({ 
   resolvedContent,
-  columnNumber = 1,
   className = '',
   columnId
-}) => {
+}: ResolvedContentColumnProps) => {
   // Simplified version for thumbnail generation - no editing functionality
   
   return (

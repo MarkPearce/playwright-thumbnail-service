@@ -1,5 +1,4 @@
-import { AdditionalMediaItem } from '@/types/slide';
-import { ContentSelectionState } from "@/shared/components/ui/ui/content-selection-dropdown";
+import { AdditionalMediaItem } from './types.js';
 
 /**
  * Content Management Utilities
@@ -141,7 +140,7 @@ export const getCustomDetailOptions = (slideContent: any) => {
 
 // Get custom media options for the dropdown
 export const getCustomMediaOptions = (slideContent: any) => {
-  const options = [];
+  const options: Array<{ id: string; label: string }> = [];
   
   // Include media from additional.media (external media from other slides)
   if (slideContent?.additional?.media) {

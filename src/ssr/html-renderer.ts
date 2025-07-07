@@ -1,4 +1,4 @@
-import { chromium, Browser, Page } from 'playwright';
+import { chromium, Browser } from 'playwright';
 import type { ThumbnailOptions } from '../types.js';
 
 let browser: Browser | null = null;
@@ -37,7 +37,6 @@ export async function renderHTMLToImage(
   const {
     width = 1280,
     height = 720,
-    deviceScaleFactor = 0.5,
     format = 'png',
     quality = 90
   } = options;
@@ -64,7 +63,7 @@ export async function renderHTMLToImage(
       return Promise.all(
         Array.from(document.images)
           .filter(img => !img.complete)
-          .map(img => new Promise((resolve, reject) => {
+          .map(img => new Promise((resolve) => {
             img.addEventListener('load', resolve);
             img.addEventListener('error', resolve); // Resolve even on error
             // Set timeout to prevent hanging

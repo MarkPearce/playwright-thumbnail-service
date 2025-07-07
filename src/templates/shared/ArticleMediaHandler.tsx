@@ -1,10 +1,6 @@
-import { AdditionalMediaItem } from '@/types/slide';
-import { MediaItemWithSource, collectAllMediaItems, formatMediaItemLabel } from './types';
-import { PresentationData } from './types';
+import { MediaItemWithSource, collectAllMediaItems, formatMediaItemLabel, PresentationData, AdditionalMediaItem } from './types.js';
 import { 
-  initializeCanonicalContent, 
-  getColumnMedia, 
-  isMediaDuplicate 
+  initializeCanonicalContent
 } from './ContentManagementUtils';
 
 /**
@@ -54,7 +50,7 @@ export const handleArticleMediaSelect = (
 
   // Get all media items and find the matching one
   const allMediaItems = collectAllMediaItems(presentationData);
-  const mediaItem = allMediaItems.find((item, i) => 
+  const mediaItem = allMediaItems.find((item: MediaItemWithSource, i: number) => 
     item.sourceSlideId === sourceSlideId && i === index
   );
 

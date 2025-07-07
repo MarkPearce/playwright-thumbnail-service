@@ -1,7 +1,20 @@
-import React from 'react';
-import { ResolvedColumnContent, ResolvedContentItem, MediaItem, AdditionalMediaItem } from '@/types/slide';
-import { MediaRenderer } from './MediaRenderer';
-import { content } from './slideStyles';
+import { MediaRenderer } from './MediaRenderer.js';
+import { AdditionalMediaItem } from './types.js';
+
+// Define local types since we don't have the full slide types
+interface ResolvedContentItem {
+  type: 'keypoint' | 'detail' | 'media';
+  content: string | MediaItem;
+}
+
+interface ResolvedColumnContent {
+  content: ResolvedContentItem[];
+}
+
+interface MediaItem {
+  component: string;
+  props?: any;
+}
 // Simple markdown parser replacement
 const parseMarkdown = (text: string) => {
   return <div dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br>') }} />;
@@ -13,11 +26,11 @@ interface ContentRendererProps {
   columnId?: string;
 }
 
-export const ContentRenderer: React.FC<ContentRendererProps> = ({
+export const ContentRenderer = ({
   resolvedContent,
   slideContent,
   columnId
-}) => {
+}: ContentRendererProps) => {
   
   // Render a single resolved content item using simplified styles
   const renderContentItem = (item: ResolvedContentItem, index: number) => {

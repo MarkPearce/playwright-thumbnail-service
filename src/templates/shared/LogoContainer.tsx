@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LogoContainerProps {
   src: string;
   alt?: string;
@@ -8,13 +6,13 @@ interface LogoContainerProps {
   className?: string;
 }
 
-export const LogoContainer: React.FC<LogoContainerProps> = ({ 
+export const LogoContainer = ({ 
   src, 
   alt = 'Logo',
   size = 'medium',
   position = 'top-right',
   className = '' 
-}) => {
+}: LogoContainerProps) => {
   if (!src) return null;
   
   const sizeClasses = {

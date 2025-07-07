@@ -2,12 +2,12 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 
 // Import templates
-import { TwoColumn } from '../templates/TwoColumn';
-import { TitleSlide } from '../templates/TitleSlide';
-import { OneColumn } from '../templates/OneColumn';
-import { ThreeColumn } from '../templates/ThreeColumn';
-import { FourColumn } from '../templates/FourColumn';
-import { LogoCard } from '../templates/LogoCard';
+import { TwoColumn } from '../templates/TwoColumn.js';
+import { TitleSlide } from '../templates/TitleSlide.js';
+import { OneColumn } from '../templates/OneColumn.js';
+import { ThreeColumn } from '../templates/ThreeColumn.js';
+import { FourColumn } from '../templates/FourColumn.js';
+import { LogoCard } from '../templates/LogoCard.js';
 
 // Template map
 const templateMap: Record<string, any> = {

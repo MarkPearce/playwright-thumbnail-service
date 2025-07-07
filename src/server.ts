@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' })); // Increased limit for TSX components
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({ 
     status: 'OK', 
     timestamp: new Date().toISOString(),
@@ -22,15 +22,16 @@ app.get('/health', (req, res) => {
 });
 
 // Main thumbnail generation endpoint
-app.post('/thumbnail', async (req, res) => {
+app.post('/thumbnail', async (req, res): Promise<void> => {
   try {
     const { component, props = {}, options = {} }: ThumbnailRequest = req.body;
     
     if (!component) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Missing required field: component',
         message: 'TSX component code is required'
       });
+      return;
     }
     
     console.log('Thumbnail request received:', { 
@@ -71,15 +72,16 @@ app.post('/thumbnail', async (req, res) => {
 });
 
 // SSR Template-based thumbnail generation endpoint
-app.post('/thumbnail/template', async (req, res) => {
+app.post('/thumbnail/template', async (req, res): Promise<void> => {
   try {
     const { templateId, props = {}, options = {} }: { templateId: string; props: any; options: ThumbnailOptions } = req.body;
     
     if (!templateId) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Missing required field: templateId',
         message: 'Template ID is required'
       });
+      return;
     }
     
     console.log('SSR Template thumbnail request:', { 
@@ -128,7 +130,7 @@ app.post('/thumbnail/template', async (req, res) => {
 });
 
 // Example endpoint to show usage
-app.get('/example', (req, res) => {
+app.get('/example', (_req, res) => {
   const exampleRequest = {
     component: `
 import React from 'react';
@@ -174,7 +176,7 @@ export default function ExampleSlide({ title, subtitle, content }: SlideProps) {
 });
 
 // Error handling middleware
-app.use((error: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Unhandled error:', error);
   res.status(500).json({ 
     error: 'Internal server error',
@@ -183,7 +185,7 @@ app.use((error: Error, req: express.Request, res: express.Response, next: expres
 });
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 

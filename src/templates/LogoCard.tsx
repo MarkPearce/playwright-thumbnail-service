@@ -1,6 +1,5 @@
-import React from 'react';
 import { TemplateDefinition } from './types';
-import { SlideContainer, SlideHeader, LogoContainer } from './shared';
+import { SlideContainer, SlideHeader, LogoContainer } from './shared/index.js';
 
 export const LogoCard: TemplateDefinition = {
   id: 'logo_card',

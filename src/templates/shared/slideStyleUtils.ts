@@ -2,7 +2,7 @@ import {
   container, 
   grid, 
   editor 
-} from './slideStyles';
+} from './slideStyles.js';
 
 // ============================================================================
 // UTILITY FUNCTIONS - Simple functions for common slide styling needs

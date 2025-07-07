@@ -1,17 +1,20 @@
-// Add this to your server.ts file
-
+import { Express } from 'express';
 import { getTemplateComponent } from './template-adapter.js';
+import { ThumbnailOptions } from './types.js';
+import { renderThumbnail } from './renderer.js';
 
 // Template-based thumbnail generation endpoint
-app.post('/thumbnail/template', async (req, res) => {
+export const setupTemplateEndpoint = (app: Express) => {
+  app.post('/thumbnail/template', async (req, res): Promise<void> => {
   try {
     const { templateId, props = {}, options = {} }: { templateId: string; props: any; options: ThumbnailOptions } = req.body;
     
     if (!templateId) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Missing required field: templateId',
         message: 'Template ID is required'
       });
+      return;
     }
     
     console.log('Template thumbnail request:', { 
@@ -25,10 +28,11 @@ app.post('/thumbnail/template', async (req, res) => {
     try {
       Component = getTemplateComponent(templateId);
     } catch (error) {
-      return res.status(400).json({ 
+      res.status(400).json({ 
         error: 'Invalid template',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
+      return;
     }
     
     // Create the component code that will be rendered
@@ -68,4 +72,5 @@ app.post('/thumbnail/template', async (req, res) => {
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
-});
+  });
+};

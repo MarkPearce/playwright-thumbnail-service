@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ImageContainerProps {
   src: string;
   alt?: string;
@@ -7,12 +5,12 @@ interface ImageContainerProps {
   className?: string;
 }
 
-export const ImageContainer: React.FC<ImageContainerProps> = ({ 
+export const ImageContainer = ({ 
   src, 
   alt = '',
   overlayTitle,
   className = '' 
-}) => {
+}: ImageContainerProps) => {
   if (!src) return null;
   
   return (
