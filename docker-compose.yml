@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  thumbnail-service:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    command: npm run dev

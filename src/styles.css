@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for slides */
+@layer components {
+  .slide-container {
+    @apply w-full h-full bg-white flex flex-col;
+  }
+  
+  .slide-header {
+    @apply px-12 pt-12 pb-8;
+  }
+  
+  .slide-title {
+    @apply text-5xl font-bold text-blue-600 mb-4 leading-tight;
+    font-family: 'Lora', serif;
+  }
+  
+  .slide-subtitle {
+    @apply text-3xl text-gray-600;
+  }
+  
+  .slide-content {
+    @apply flex-1 px-12 pb-12;
+  }
+  
+  .keypoint {
+    @apply flex items-start space-x-3 mb-4;
+  }
+  
+  .keypoint-bullet {
+    @apply flex-shrink-0 text-2xl font-bold text-cyan-600;
+  }
+  
+  .keypoint-text {
+    @apply flex-1 text-xl font-medium text-gray-800 leading-relaxed;
+  }
+  
+  .detail-text {
+    @apply text-xl text-gray-800 leading-relaxed mb-4;
+  }
+  
+  .media-container {
+    @apply w-full mb-6;
+  }
+  
+  .media-image {
+    @apply w-full h-auto rounded-lg shadow-md;
+  }
+  
+  .media-caption {
+    @apply text-sm text-gray-600 mt-2 italic;
+  }
+}
