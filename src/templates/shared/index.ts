@@ -1,14 +1,14 @@
-export { SlideContainer } from './SlideContainer.js';
-export { SlideHeader } from './SlideHeader.js';
-export { SlideTitle } from './SlideTitle.js';
-export { SlideSubtitle } from './SlideSubtitle.js';
-export { GridContainer } from './GridContainer.js';
-export { ResolvedContentColumn } from './ResolvedContentColumn.js';
-export { ImageContainer } from './ImageContainer.js';
-export { LogoContainer } from './LogoContainer.js';
+export { SlideContainer } from './SlideContainer';
+export { SlideHeader } from './SlideHeader';
+export { SlideTitle } from './SlideTitle';
+export { SlideSubtitle } from './SlideSubtitle';
+export { GridContainer } from './GridContainer';
+export { ResolvedContentColumn } from './ResolvedContentColumn';
+export { ImageContainer } from './ImageContainer';
+export { LogoContainer } from './LogoContainer';
 
 // Export simplified utility functions
-export * from './slideStyleUtils.js';
+export * from './slideStyleUtils';
 
 // Export simplified style definitions
-export * from './slideStyles.js';
+export * from './slideStyles';

@@ -1,9 +1,6 @@
-import { content } from './slideStyles.js';
-
-interface MediaItem {
-  component: string;
-  props?: any;
-}
+import React from 'react';
+import { MediaItem } from '../../types/slide';
+import { content } from './slideStyles';
 
 interface MediaRendererProps {
   media: MediaItem;

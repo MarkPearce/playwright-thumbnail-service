@@ -9,6 +9,15 @@ The Playwright Thumbnail Service generates high-quality PNG/JPEG/WebP thumbnails
 - **Authentication**: None required
 - **Content-Type**: `application/json` for requests, `image/*` for responses
 
+- Health check: `http://localhost:3001/health`
+
+- Example usage: `http://localhost:3001/example`
+
+- Main thumbnail endpoint: `POST /thumbnail`
+
+- Template endpoint: `POST /thumbnail/template`
+
+
 ---
 
 ## Endpoints

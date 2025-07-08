@@ -21,24 +21,51 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// Main thumbnail generation endpoint
+// Simple thumbnail generation endpoint - uses actual slide templates
 app.post('/thumbnail', async (req, res): Promise<void> => {
   try {
-    const { component, props = {}, options = {} }: ThumbnailRequest = req.body;
+    const { slideData, options = {} } = req.body;
     
-    if (!component) {
+    if (!slideData) {
       res.status(400).json({ 
-        error: 'Missing required field: component',
-        message: 'TSX component code is required'
+        error: 'Missing slideData',
+        message: 'slideData is required'
       });
       return;
     }
     
-    console.log('Thumbnail request received:', { 
-      componentLength: component.length,
-      propsKeys: Object.keys(props),
-      options 
+    console.log('Thumbnail request with real templates:', { 
+      layout: slideData.layout_id,
+      hasResolvedContent: !!slideData.resolved_content
     });
+    
+    // Map layout_id to template component names
+    const templateMap = {
+      'title_slide': 'TitleSlide',
+      'one_column': 'OneColumn', 
+      'two_column': 'TwoColumn',
+      'three_column': 'ThreeColumn',
+      'four_column': 'FourColumn',
+      'logo_card': 'LogoCard'
+    };
+    
+    const templateName = templateMap[slideData.layout_id as keyof typeof templateMap] || 'TwoColumn';
+    
+    // Create component code that uses the actual templates
+    const componentCode = `
+      function SlideComponent() {
+        const slideData = ${JSON.stringify(slideData)};
+        
+        // Get the template component from window.TemplateComponents
+        const TemplateComponent = window.TemplateComponents.${templateName};
+        
+        // Use resolved content directly
+        const resolvedContent = slideData.resolved_content || {};
+        
+        // Render using the actual template component
+        return React.createElement(TemplateComponent, resolvedContent);
+      }
+    `;
     
     // Default options
     const defaultOptions: ThumbnailOptions = {
@@ -50,14 +77,14 @@ app.post('/thumbnail', async (req, res): Promise<void> => {
     
     const renderOptions = { ...defaultOptions, ...options };
     
-    // Generate thumbnail
-    const imageBuffer = await renderThumbnail(component, props, renderOptions);
+    // Generate thumbnail using real templates
+    const imageBuffer = await renderThumbnail(componentCode, {}, renderOptions);
     
-    // Set response headers
+    // Return image
     res.set({
       'Content-Type': `image/${renderOptions.format}`,
       'Content-Length': imageBuffer.length.toString(),
-      'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+      'Cache-Control': 'public, max-age=3600'
     });
     
     res.send(imageBuffer);

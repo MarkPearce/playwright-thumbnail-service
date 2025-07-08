@@ -1,5 +1,6 @@
-import { getGridClasses } from './slideStyleUtils.js';
-import { type ColumnCount } from './slideStyles.js';
+import React from 'react';
+import { getGridClasses } from './slideStyleUtils';
+import { type ColumnCount } from './slideStyles';
 
 interface GridContainerProps {
   children: any;

@@ -1,5 +1,6 @@
+import React from 'react';
 import { TemplateDefinition } from './types';
-import { SlideContainer, SlideHeader, GridContainer, ResolvedContentColumn } from './shared/index.js';
+import { SlideContainer, SlideHeader, GridContainer, ResolvedContentColumn } from './shared';
 
 export const TwoColumn: TemplateDefinition = {
   id: 'two_column',
