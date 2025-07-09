@@ -38,13 +38,16 @@ export const TwoColumn: TemplateDefinition = {
       placeholder: 'Enter content for right column'
     }
   ],
-  component: ({ 
-    title, 
-    subtitle, 
-    column1, 
-    column2
-  }) => {
-            return (
+  component: (props) => {
+    // Extract title and subtitle from props
+    const title = props.title;
+    const subtitle = props.subtitle;
+    
+    // Extract column data directly from resolved_content structure
+    const column1 = props.column1;
+    const column2 = props.column2;
+    
+    return (
       <SlideContainer>
         <SlideHeader title={title} subtitle={subtitle} />
         <GridContainer columns={2}>

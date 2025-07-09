@@ -127,10 +127,34 @@ app.post('/thumbnail/template', async (req, res): Promise<void> => {
     
     const renderOptions = { ...defaultOptions, ...options };
     
-    // Render template to HTML using SSR
+    // Smart content resolution - handle both resolved_content and basic content
+    let resolvedProps = props;
+    
+    if (props.resolved_content) {
+      // Already has resolved content - use directly
+      console.log('✅ Using existing resolved_content');
+      resolvedProps = props.resolved_content;
+    } else if (props.content) {
+      // Has basic content - transform to resolved content
+      console.log('🔄 Transforming basic content to resolved_content');
+      console.log('Basic content:', JSON.stringify(props.content, null, 2));
+      
+      // Import ContentResolver
+      const { ContentResolver } = await import('./content-resolver.js');
+      
+      // Transform basic content to resolved content
+      resolvedProps = ContentResolver.resolveSlideContentWithDefaults(props.content, templateId);
+      
+      console.log('Resolved content:', JSON.stringify(resolvedProps, null, 2));
+    } else {
+      // Fallback - use props as-is (for backward compatibility)
+      console.log('⚠️  No resolved_content or content found, using props as-is');
+    }
+    
+    // Render template with resolved content
     const html = renderTemplate({
       templateId,
-      props,
+      props: resolvedProps,
       width: renderOptions.width,
       height: renderOptions.height
     });

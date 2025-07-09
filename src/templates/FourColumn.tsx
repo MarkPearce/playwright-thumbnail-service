@@ -51,15 +51,18 @@ export const FourColumn: TemplateDefinition = {
       placeholder: 'Enter content for fourth column'
     }
   ],
-  component: ({ 
-    title, 
-    subtitle, 
-    column1, 
-    column2, 
-    column3,
-    column4
-  }) => {
-            return (
+  component: (props) => {
+    // Extract title and subtitle from props
+    const title = props.title;
+    const subtitle = props.subtitle;
+    
+    // Extract column data directly from resolved_content structure
+    const column1 = props.column1;
+    const column2 = props.column2;
+    const column3 = props.column3;
+    const column4 = props.column4;
+    
+    return (
       <SlideContainer>
         <SlideHeader title={title} subtitle={subtitle} />
         <GridContainer columns={4}>
