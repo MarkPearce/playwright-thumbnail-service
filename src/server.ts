@@ -36,7 +36,7 @@ app.post('/thumbnail', async (req, res): Promise<void> => {
     
     console.log('Thumbnail request with real templates:', { 
       layout: slideData.layout_id,
-      hasResolvedContent: !!slideData.resolved_content
+      hasRenderData: !!slideData.renderData
     });
     
     // Map layout_id to template component names
@@ -59,11 +59,11 @@ app.post('/thumbnail', async (req, res): Promise<void> => {
         // Get the template component from window.TemplateComponents
         const TemplateComponent = window.TemplateComponents.${templateName};
         
-        // Use resolved content directly
-        const resolvedContent = slideData.resolved_content || {};
+        // Use renderData directly - it's already pre-resolved
+        const renderData = slideData.renderData || {};
         
         // Render using the actual template component
-        return React.createElement(TemplateComponent, resolvedContent);
+        return React.createElement(TemplateComponent, renderData);
       }
     `;
     
@@ -127,34 +127,19 @@ app.post('/thumbnail/template', async (req, res): Promise<void> => {
     
     const renderOptions = { ...defaultOptions, ...options };
     
-    // Smart content resolution - handle both resolved_content and basic content
-    let resolvedProps = props;
+    // Props should already be in the correct format (renderData)
+    // No content resolution needed - just pass through
+    console.log('✅ Using pre-resolved renderData directly');
+    console.log('📊 RenderData structure:', {
+      hasTitle: !!props.title,
+      hasSubtitle: !!props.subtitle,
+      columns: Object.keys(props).filter(key => key.startsWith('column'))
+    });
     
-    if (props.resolved_content) {
-      // Already has resolved content - use directly
-      console.log('✅ Using existing resolved_content');
-      resolvedProps = props.resolved_content;
-    } else if (props.content) {
-      // Has basic content - transform to resolved content
-      console.log('🔄 Transforming basic content to resolved_content');
-      console.log('Basic content:', JSON.stringify(props.content, null, 2));
-      
-      // Import ContentResolver
-      const { ContentResolver } = await import('./content-resolver.js');
-      
-      // Transform basic content to resolved content
-      resolvedProps = ContentResolver.resolveSlideContentWithDefaults(props.content, templateId);
-      
-      console.log('Resolved content:', JSON.stringify(resolvedProps, null, 2));
-    } else {
-      // Fallback - use props as-is (for backward compatibility)
-      console.log('⚠️  No resolved_content or content found, using props as-is');
-    }
-    
-    // Render template with resolved content
+    // Render template with pre-resolved renderData
     const html = renderTemplate({
       templateId,
-      props: resolvedProps,
+      props: props, // Pass renderData directly to templates
       width: renderOptions.width,
       height: renderOptions.height
     });
@@ -244,6 +229,7 @@ app.listen(PORT, () => {
   console.log(`🎭 Playwright Thumbnail Service running on port ${PORT}`);
   console.log(`📋 Health check: http://localhost:${PORT}/health`);
   console.log(`📖 Example usage: http://localhost:${PORT}/example`);
+  console.log(`✨ Service simplified: Now receives pre-resolved renderData directly`);
 });
 
 export default app;

@@ -45,13 +45,16 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
     if (imageProps.caption && shouldShowCaption) {
       return (
         <figure className={content.media.figure.container} data-media-figure>
-          <img 
-            src={imageProps.url} 
-            alt={imageProps.alt || 'Media content'}
-            className={`${content.media.figure.image.base} ${content.media.figure.image.responsive}`}
-            data-media-image
-            onError={handleImageError}
-          />
+          <div className="relative w-full h-full overflow-hidden rounded shadow">
+            <img 
+              src={imageProps.url} 
+              alt={imageProps.alt || 'Media content'}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: 'center' }}
+              data-media-image
+              onError={handleImageError}
+            />
+          </div>
           <figcaption className={`${content.media.caption.base} ${content.media.caption.responsive}`} data-media-caption>
             {imageProps.caption}
           </figcaption>
@@ -61,13 +64,16 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
       // No caption, render as simple image wrapper
       return (
         <div className={content.media.figure.container} data-media-wrapper>
-          <img 
-            src={imageProps.url} 
-            alt={imageProps.alt || 'Media content'}
-            className={`${content.media.figure.image.base} ${content.media.figure.image.responsive}`}
-            data-media-image
-            onError={handleImageError}
-          />
+          <div className="relative w-full h-full overflow-hidden rounded shadow">
+            <img 
+              src={imageProps.url} 
+              alt={imageProps.alt || 'Media content'}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: 'center' }}
+              data-media-image
+              onError={handleImageError}
+            />
+          </div>
         </div>
       );
     }

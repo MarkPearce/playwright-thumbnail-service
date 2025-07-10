@@ -52,7 +52,7 @@ export const content = {
     figure: {
       container: 'flex flex-col items-center justify-center',
       image: {
-        base: 'w-full object-contain rounded shadow',
+        base: 'w-full rounded shadow',
         responsive: 'h-auto',
       },
     },

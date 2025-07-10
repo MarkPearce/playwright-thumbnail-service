@@ -1,6 +1,5 @@
-import { TemplateDefinition } from './types';
+import { TemplateDefinition, TitleSlideProps } from './types.js';
 import { SlideContainer, ImageContainer } from './shared/index.js';
-import { SLIDE_STYLES } from './shared/slideStyles.js';
 
 export const TitleSlide: TemplateDefinition = {
   id: 'title_slide',
@@ -45,37 +44,39 @@ export const TitleSlide: TemplateDefinition = {
       placeholder: 'Enter organization name'
     }
   ],
-  component: ({ 
-    background_image, 
-    title, 
-    subtitle, 
-    author, 
-    organization
-  }) => (
+  component: (props: TitleSlideProps) => {
+    const { background_image, title, subtitle, author, organization } = props;
+    
+    return (
     <SlideContainer>
       {background_image && (
         <ImageContainer 
           src={background_image} 
           alt="Background" 
-          className="absolute inset-0 w-full h-full object-contain opacity-20"
+          className="absolute inset-0 w-full h-full opacity-20"
+          objectFit="cover"
+          objectPosition="center"
         />
       )}
       <div className="flex flex-col items-center justify-center flex-1 text-center px-12">
-        <h1 className={`${SLIDE_STYLES.typography.titleSlide.title.base} ${SLIDE_STYLES.typography.titleSlide.title.responsive} mb-8`}>
+        <h1 className="font-black text-cyan-600 leading-tight text-balance text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl mb-8">
           {title}
         </h1>
         {subtitle && (
-          <h2 className={`${SLIDE_STYLES.typography.titleSlide.subtitle.base} ${SLIDE_STYLES.typography.titleSlide.subtitle.responsive}`}>
+          <h2 className="font-medium text-slate-500 text-balance text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
             {subtitle}
           </h2>
         )}
       </div>
-      <div className="flex justify-center md:justify-end items-end pb-12">
-        <div className="p-3 md:p-4 bg-white/75 rounded-lg flex flex-col gap-2 md:gap-3">
-          <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{author}</div>
-          <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{organization}</div>
+      {(author || organization) && (
+        <div className="flex justify-center md:justify-end items-end pb-12">
+          <div className="p-3 md:p-4 bg-white/75 rounded-lg flex flex-col gap-2 md:gap-3">
+            {author && <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{author}</div>}
+            {organization && <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{organization}</div>}
+          </div>
         </div>
-      </div>
+      )}
     </SlideContainer>
-  )
+    );
+  }
 };

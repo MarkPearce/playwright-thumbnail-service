@@ -1,4 +1,4 @@
-import { TemplateDefinition } from './types';
+import { TemplateDefinition, OneColumnProps } from './types';
 import { SlideContainer, SlideHeader, GridContainer, ResolvedContentColumn } from './shared/index.js';
 
 export const OneColumn: TemplateDefinition = {
@@ -23,16 +23,16 @@ export const OneColumn: TemplateDefinition = {
       placeholder: 'Enter slide subtitle'
     },
     {
-      name: 'content',
+      name: 'column1',
       type: 'rich_text',
       required: true,
       defaultValue: '<p>Your content goes here...</p>',
       placeholder: 'Enter slide content'
     }
   ],
-  component: (props) => {
+  component: (props: OneColumnProps) => {
     // Extract title and subtitle from props
-    const title = props.title;
+    const title = props.title || '';
     const subtitle = props.subtitle;
     
     // Extract column data directly from resolved_content structure

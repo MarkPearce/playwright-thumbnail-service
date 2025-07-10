@@ -1,4 +1,13 @@
 import { ReactNode } from 'react';
+import type { 
+  TitleSlideProps, 
+  OneColumnProps, 
+  TwoColumnProps, 
+  ThreeColumnProps, 
+  FourColumnProps,
+  LogoCardProps,
+  TemplateProps 
+} from '../types/template-props';
 
 export interface TemplateField {
   name: string;
@@ -15,20 +24,19 @@ export interface TemplateDefinition {
   thumbnail: string;
   fields: TemplateField[];
   columnCount: number; // Number of content columns (0 for special layouts like title_slide)
-  component: (props: TemplateRenderProps) => ReactNode;
+  component: (props: TemplateProps) => ReactNode;
 }
 
-export interface TemplateRenderProps {
-  // Template field values - only layout-specific data
-  [key: string]: any;
-  
-  // Note: Editor functionality is now provided via TemplateContext
-  // Templates should use useTemplateContext() for editor operations
-}
-
-export interface TemplateProps {
-  [key: string]: any;
-}
+// Re-export standardized template props for convenience
+export type {
+  TitleSlideProps,
+  OneColumnProps,
+  TwoColumnProps,
+  ThreeColumnProps,
+  FourColumnProps,
+  LogoCardProps,
+  TemplateProps
+};
 
 // Layout registry interface for unified layout system
 export interface LayoutDefinition {
