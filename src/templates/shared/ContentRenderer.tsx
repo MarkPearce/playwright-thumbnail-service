@@ -1,6 +1,5 @@
-import React from 'react';
 import { ResolvedColumnContent, ResolvedContentItem, MediaItem, AdditionalMediaItem } from '../../types/slide';
-import { MediaRenderer } from './MediaRenderer';
+import { MediaRenderer } from './MediaRenderer.js';
 // Simple markdown parser replacement
 const parseMarkdown = (text: string) => {
   return <div dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br>') }} />;

@@ -1,4 +1,4 @@
-import { TemplateDefinition } from './types';
+import { TemplateDefinition, LogoCardProps } from './types.js';
 import { SlideContainer, SlideHeader, LogoContainer } from './shared/index.js';
 
 export const LogoCard: TemplateDefinition = {
@@ -37,17 +37,22 @@ export const LogoCard: TemplateDefinition = {
       placeholder: 'Background color'
     }
   ],
-  component: ({ 
-    logo, 
-    title, 
-    subtitle, 
-    background_color
-  }) => (
-    <SlideContainer>
-      <div className="flex-1 flex flex-col justify-center items-center" style={{ backgroundColor: background_color }}>
-        <LogoContainer src={logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 mb-3 md:mb-4" />
-        <SlideHeader title={title} subtitle={subtitle} className="text-center" />
-      </div>
-    </SlideContainer>
-  )
+  component: (props) => {
+    // Type assertion since we know this template receives LogoCardProps
+    const logoCardProps = props as LogoCardProps;
+    
+    const logo = logoCardProps.logo_url;
+    const title = logoCardProps.title;
+    const subtitle = logoCardProps.subtitle;
+    const background_color = logoCardProps.background_color;
+    
+    return (
+      <SlideContainer>
+        <div className="flex-1 flex flex-col justify-center items-center" style={{ backgroundColor: background_color }}>
+          {logo && <LogoContainer src={logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 mb-3 md:mb-4" />}
+          <SlideHeader title={title || ''} subtitle={subtitle} className="text-center" />
+        </div>
+      </SlideContainer>
+    );
+  }
 };

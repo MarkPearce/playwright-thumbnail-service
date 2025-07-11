@@ -1,6 +1,5 @@
-import React from 'react';
-import { getSlideColumnClasses } from './slideStyleUtils';
-import { ContentRenderer } from './ContentRenderer';
+import { getSlideColumnClasses } from './slideStyleUtils.js';
+import { ContentRenderer } from './ContentRenderer.js';
 
 interface ResolvedContentColumnProps {
   resolvedContent?: any;

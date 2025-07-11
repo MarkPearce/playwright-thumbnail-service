@@ -1,4 +1,4 @@
-import { TemplateDefinition, OneColumnProps } from './types';
+import { TemplateDefinition, OneColumnProps } from './types.js';
 import { SlideContainer, SlideHeader, GridContainer, ResolvedContentColumn } from './shared/index.js';
 
 export const OneColumn: TemplateDefinition = {

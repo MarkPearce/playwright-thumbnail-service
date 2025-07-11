@@ -1,7 +1,7 @@
 import { MediaItemWithSource, collectAllMediaItems, formatMediaItemLabel, PresentationData, AdditionalMediaItem } from './types.js';
-import { 
+import {
   initializeCanonicalContent
-} from './ContentManagementUtils';
+} from './ContentManagementUtils.js';
 
 /**
  * Article Media Handler

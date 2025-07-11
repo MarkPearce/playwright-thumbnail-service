@@ -1,4 +1,4 @@
-import { TemplateDefinition } from './types';
+import { TemplateDefinition, ThreeColumnProps } from './types.js';
 import { SlideContainer, SlideHeader, GridContainer, ResolvedContentColumn } from './shared/index.js';
 
 export const ThreeColumn: TemplateDefinition = {
@@ -45,18 +45,21 @@ export const ThreeColumn: TemplateDefinition = {
     }
   ],
   component: (props) => {
+    // Type assertion since we know this template receives ThreeColumnProps
+    const threeColumnProps = props as ThreeColumnProps;
+    
     // Extract title and subtitle from props
-    const title = props.title;
-    const subtitle = props.subtitle;
+    const title = threeColumnProps.title;
+    const subtitle = threeColumnProps.subtitle;
     
     // Extract column data directly from resolved_content structure
-    const column1 = props.column1;
-    const column2 = props.column2;
-    const column3 = props.column3;
+    const column1 = threeColumnProps.column1;
+    const column2 = threeColumnProps.column2;
+    const column3 = threeColumnProps.column3;
     
     return (
       <SlideContainer>
-        <SlideHeader title={title} subtitle={subtitle} />
+        <SlideHeader title={title || ''} subtitle={subtitle} />
         <GridContainer columns={3}>
           <ResolvedContentColumn 
             resolvedContent={column1}

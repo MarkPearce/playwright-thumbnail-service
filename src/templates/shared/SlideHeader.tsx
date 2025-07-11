@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface SlideHeaderProps {
   title: string;
   subtitle?: string;

@@ -3,7 +3,7 @@ import cors from 'cors';
 import { renderThumbnail } from './renderer.js';
 import { renderTemplate } from './ssr/entry.js';
 import { renderHTMLToImage } from './ssr/html-renderer.js';
-import type { ThumbnailRequest, ThumbnailOptions } from './types.js';
+import type { ThumbnailOptions } from './types.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001; // Using 3001 to avoid conflict with existing service

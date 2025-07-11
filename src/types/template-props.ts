@@ -73,6 +73,7 @@ export interface LogoCardProps {
   logo_url?: string;
   title?: string;
   subtitle?: string;
+  background_color?: string;
 }
 
 /**

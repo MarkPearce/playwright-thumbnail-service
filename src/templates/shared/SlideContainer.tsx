@@ -1,5 +1,4 @@
-import React from 'react';
-import { getSlideContainerClasses, getSlideContentClasses } from './slideStyleUtils';
+import { getSlideContainerClasses, getSlideContentClasses } from './slideStyleUtils.js';
 
 interface SlideContainerProps {
   children: any;

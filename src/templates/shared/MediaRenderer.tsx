@@ -1,6 +1,5 @@
-import React from 'react';
 import { MediaItem } from '../../types/slide';
-import { content } from './slideStyles';
+import { content } from './slideStyles.js';
 
 interface MediaRendererProps {
   media: MediaItem;
