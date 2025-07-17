@@ -153,7 +153,6 @@ export async function renderComparison(
     originalHtml,
     modifiedHtml,
     designSystem = {},
-    changes = [],
     options = {}
   } = request;
 
