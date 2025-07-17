@@ -3,6 +3,7 @@ import cors from 'cors';
 import { renderThumbnail } from './renderer.js';
 import { renderTemplate } from './ssr/entry.js';
 import { renderHTMLToImage } from './ssr/html-renderer.js';
+import { renderVariation, renderComparison, renderBatch } from './variation-renderer.js';
 import type { ThumbnailOptions } from './types.js';
 
 const app = express();
@@ -165,6 +166,145 @@ app.post('/thumbnail/template', async (req, res): Promise<void> => {
   }
 });
 
+// New endpoint for rendering HTML variations
+app.post('/render-variation', async (req, res): Promise<void> => {
+  try {
+    const { modifiedHtml, designSystem, changes, options = {} } = req.body;
+    
+    if (!modifiedHtml) {
+      res.status(400).json({ 
+        error: 'Missing required field: modifiedHtml',
+        message: 'Modified HTML content is required'
+      });
+      return;
+    }
+    
+    console.log('Variation render request received:', { 
+      hasDesignSystem: !!designSystem,
+      changesCount: changes?.length || 0,
+      options 
+    });
+    
+    // Generate variation preview
+    const imageBuffer = await renderVariation({
+      modifiedHtml,
+      designSystem,
+      changes,
+      options
+    });
+    
+    // Set response headers
+    res.set({
+      'Content-Type': `image/${options.format || 'png'}`,
+      'Content-Length': imageBuffer.length.toString(),
+      'Cache-Control': 'public, max-age=3600'
+    });
+    
+    res.send(imageBuffer);
+    
+  } catch (error) {
+    console.error('Error rendering variation:', error);
+    res.status(500).json({ 
+      error: 'Failed to render variation',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// New endpoint for side-by-side comparison
+app.post('/render-comparison', async (req, res): Promise<void> => {
+  try {
+    const { originalHtml, modifiedHtml, designSystem, changes, options = {} } = req.body;
+    
+    if (!originalHtml || !modifiedHtml) {
+      res.status(400).json({ 
+        error: 'Missing required fields',
+        message: 'Both originalHtml and modifiedHtml are required for comparison'
+      });
+      return;
+    }
+    
+    console.log('Comparison render request received:', { 
+      hasDesignSystem: !!designSystem,
+      changesCount: changes?.length || 0,
+      options 
+    });
+    
+    // Generate comparison preview
+    const imageBuffer = await renderComparison({
+      originalHtml,
+      modifiedHtml,
+      designSystem,
+      changes,
+      options
+    });
+    
+    // Set response headers
+    res.set({
+      'Content-Type': `image/${options.format || 'png'}`,
+      'Content-Length': imageBuffer.length.toString(),
+      'Cache-Control': 'public, max-age=3600'
+    });
+    
+    res.send(imageBuffer);
+    
+  } catch (error) {
+    console.error('Error rendering comparison:', error);
+    res.status(500).json({ 
+      error: 'Failed to render comparison',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// New endpoint for batch rendering
+app.post('/render-batch', async (req, res): Promise<void> => {
+  try {
+    const { variations, options = {} } = req.body;
+    
+    if (!variations || !Array.isArray(variations) || variations.length === 0) {
+      res.status(400).json({ 
+        error: 'Missing or invalid variations',
+        message: 'An array of variations is required'
+      });
+      return;
+    }
+    
+    console.log('Batch render request received:', { 
+      variationCount: variations.length,
+      options 
+    });
+    
+    // Generate batch previews
+    const results = await renderBatch(variations);
+    
+    // Convert buffers to base64 for JSON response
+    const response = results.map(result => ({
+      id: result.id,
+      success: result.success,
+      image: result.success && result.buffer ? result.buffer.toString('base64') : null,
+      error: result.error || null
+    }));
+    
+    res.json({
+      success: true,
+      results: response,
+      summary: {
+        total: results.length,
+        successful: results.filter(r => r.success).length,
+        failed: results.filter(r => !r.success).length
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error in batch rendering:', error);
+    res.status(500).json({ 
+      error: 'Failed to render batch',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Example endpoint to show usage
 app.get('/example', (_req, res) => {
   const exampleRequest = {
@@ -203,11 +343,55 @@ export default function ExampleSlide({ title, subtitle, content }: SlideProps) {
     }
   };
   
+  const variationExample = {
+    modifiedHtml: "<h1>Modified Page</h1><p>This is a variation</p>",
+    designSystem: {
+      css: "body { font-family: Arial; }",
+      colorPalette: { primary: "#007bff", secondary: "#6c757d" }
+    },
+    changes: [
+      { selector: "h1", changeType: "content", originalContent: "Original", newContent: "Modified" }
+    ],
+    options: {
+      width: 1440,
+      height: 900,
+      highlightChanges: true
+    }
+  };
+  
   res.json({
     message: "Playwright Thumbnail Service - Example Usage",
-    endpoint: "POST /thumbnail",
-    example: exampleRequest,
-    note: "Send TSX component code directly - no JavaScript conversion needed!"
+    endpoints: {
+      thumbnail: {
+        path: "POST /thumbnail",
+        description: "Render TSX components",
+        example: exampleRequest
+      },
+      variation: {
+        path: "POST /render-variation",
+        description: "Render CRO variations with design system",
+        example: variationExample
+      },
+      comparison: {
+        path: "POST /render-comparison",
+        description: "Side-by-side comparison of control vs variation",
+        example: {
+          originalHtml: "<h1>Original Page</h1>",
+          ...variationExample
+        }
+      },
+      batch: {
+        path: "POST /render-batch",
+        description: "Batch render multiple variations",
+        example: {
+          variations: [
+            { id: "var1", ...variationExample },
+            { id: "var2", ...variationExample }
+          ]
+        }
+      }
+    },
+    note: "Service supports both TSX components and HTML variation rendering!"
   });
 });
 
