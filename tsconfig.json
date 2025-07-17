@@ -5,7 +5,7 @@
     "lib": ["ES2022", "DOM"],
     "jsx": "react-jsx",
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -20,19 +20,10 @@
     "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@ai/*": ["../../src/ai/*"],
-      "@logger/*": ["../../src/logger/*"],
-      "@types/*": ["../../src/types/*"]
-    }
+    "baseUrl": "./src"
   },
   "include": [
-    "src/**/*",
-    "../../src/logger/**/*",
-    "../../src/ai/variation/**/*",
-    "../../src/types/**/*"
+    "src/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }
