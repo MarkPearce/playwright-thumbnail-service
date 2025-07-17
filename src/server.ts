@@ -4,6 +4,11 @@ import { renderThumbnail } from './renderer.js';
 import { renderTemplate } from './ssr/entry.js';
 import { renderHTMLToImage } from './ssr/html-renderer.js';
 import { renderVariation, renderComparison, renderBatch } from './variation-renderer.js';
+import { 
+  renderEnhancedVariation, 
+  renderEnhancedComparison, 
+  renderEnhancedBatch 
+} from './enhanced-variation-renderer.js';
 import type { ThumbnailOptions } from './types.js';
 
 const app = express();
@@ -305,6 +310,141 @@ app.post('/render-batch', async (req, res): Promise<void> => {
   }
 });
 
+// Enhanced endpoint for rendering variations with CSS integration
+app.post('/render-enhanced-variation', async (req, res): Promise<void> => {
+  try {
+    const { modifiedHtml, referencePageId, options = {} } = req.body;
+    
+    if (!modifiedHtml) {
+      res.status(400).json({ 
+        error: 'Missing required field: modifiedHtml',
+        message: 'Modified HTML content is required'
+      });
+      return;
+    }
+    
+    console.log('Enhanced variation render request received:', { 
+      hasReferencePageId: !!referencePageId,
+      options 
+    });
+    
+    // Generate enhanced variation preview with CSS integration
+    const imageBuffer = await renderEnhancedVariation({
+      modifiedHtml,
+      referencePageId,
+      options
+    });
+    
+    // Set response headers
+    res.set({
+      'Content-Type': `image/${options.format || 'png'}`,
+      'Content-Length': imageBuffer.length.toString(),
+      'Cache-Control': 'public, max-age=3600'
+    });
+    
+    res.send(imageBuffer);
+    
+  } catch (error) {
+    console.error('Error rendering enhanced variation:', error);
+    res.status(500).json({ 
+      error: 'Failed to render enhanced variation',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Enhanced endpoint for side-by-side comparison with CSS integration
+app.post('/render-enhanced-comparison', async (req, res): Promise<void> => {
+  try {
+    const { originalHtml, modifiedHtml, referencePageId, options = {} } = req.body;
+    
+    if (!originalHtml || !modifiedHtml) {
+      res.status(400).json({ 
+        error: 'Missing required fields',
+        message: 'Both originalHtml and modifiedHtml are required for comparison'
+      });
+      return;
+    }
+    
+    console.log('Enhanced comparison render request received:', { 
+      hasReferencePageId: !!referencePageId,
+      options 
+    });
+    
+    // Generate enhanced comparison preview with CSS integration
+    const imageBuffer = await renderEnhancedComparison({
+      originalHtml,
+      modifiedHtml,
+      referencePageId,
+      options
+    });
+    
+    // Set response headers
+    res.set({
+      'Content-Type': `image/${options.format || 'png'}`,
+      'Content-Length': imageBuffer.length.toString(),
+      'Cache-Control': 'public, max-age=3600'
+    });
+    
+    res.send(imageBuffer);
+    
+  } catch (error) {
+    console.error('Error rendering enhanced comparison:', error);
+    res.status(500).json({ 
+      error: 'Failed to render enhanced comparison',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
+// Enhanced endpoint for batch rendering with CSS integration
+app.post('/render-enhanced-batch', async (req, res): Promise<void> => {
+  try {
+    const { variations, options = {} } = req.body;
+    
+    if (!variations || !Array.isArray(variations) || variations.length === 0) {
+      res.status(400).json({ 
+        error: 'Missing or invalid variations',
+        message: 'An array of variations is required'
+      });
+      return;
+    }
+    
+    console.log('Enhanced batch render request received:', { 
+      variationCount: variations.length,
+      options 
+    });
+    
+    // Generate enhanced batch previews with CSS integration
+    const results = await renderEnhancedBatch(variations);
+    
+    // Convert buffers to base64 for JSON response
+    const response = results.map(result => ({
+      id: result.id,
+      success: result.success,
+      image: result.success && result.buffer ? result.buffer.toString('base64') : null,
+      error: result.error || null
+    }));
+    
+    res.json({
+      success: true,
+      results: response,
+      summary: {
+        total: results.length,
+        successful: results.filter(r => r.success).length,
+        failed: results.filter(r => !r.success).length
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error in enhanced batch rendering:', error);
+    res.status(500).json({ 
+      error: 'Failed to render enhanced batch',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Example endpoint to show usage
 app.get('/example', (_req, res) => {
   const exampleRequest = {
@@ -358,15 +498,51 @@ export default function ExampleSlide({ title, subtitle, content }: SlideProps) {
       highlightChanges: true
     }
   };
+
+  const enhancedVariationExample = {
+    modifiedHtml: "<h1>Enhanced Page</h1><p>This variation uses CSS data from reference page</p>",
+    referencePageId: "uuid-of-reference-page",
+    options: {
+      width: 1440,
+      height: 900,
+      highlightChanges: true,
+      cssIntegration: {
+        enableDesignIntelligence: true,
+        preserveBrandElements: true,
+        optimizeForThumbnails: true
+      }
+    }
+  };
   
   res.json({
-    message: "Playwright Thumbnail Service - Example Usage",
+    message: "Playwright Thumbnail Service - Enhanced with CSS Integration",
+    version: "2.0.0",
+    features: [
+      "TSX component rendering",
+      "HTML variation rendering", 
+      "CSS data integration",
+      "Brand preservation",
+      "Design intelligence",
+      "Side-by-side comparisons",
+      "Batch processing"
+    ],
     endpoints: {
+      // Basic endpoints
       thumbnail: {
         path: "POST /thumbnail",
         description: "Render TSX components",
         example: exampleRequest
       },
+      template: {
+        path: "POST /thumbnail/template",
+        description: "Render SSR templates",
+        example: {
+          templateId: "TwoColumn",
+          props: { title: "Example", subtitle: "Template rendering" }
+        }
+      },
+      
+      // Standard variation endpoints
       variation: {
         path: "POST /render-variation",
         description: "Render CRO variations with design system",
@@ -389,9 +565,53 @@ export default function ExampleSlide({ title, subtitle, content }: SlideProps) {
             { id: "var2", ...variationExample }
           ]
         }
+      },
+
+      // Enhanced endpoints with CSS integration
+      enhancedVariation: {
+        path: "POST /render-enhanced-variation",
+        description: "Render variations with CSS data integration and brand preservation",
+        example: enhancedVariationExample,
+        features: [
+          "CSS data fetching from reference pages",
+          "Brand element preservation",
+          "Design intelligence analysis",
+          "Thumbnail optimization"
+        ]
+      },
+      enhancedComparison: {
+        path: "POST /render-enhanced-comparison",
+        description: "Enhanced side-by-side comparison with CSS integration",
+        example: {
+          originalHtml: "<h1>Original Page</h1>",
+          modifiedHtml: "<h1>Enhanced Page</h1>",
+          referencePageId: "uuid-of-reference-page",
+          options: {
+            cssIntegration: {
+              enableDesignIntelligence: true,
+              preserveBrandElements: true
+            }
+          }
+        }
+      },
+      enhancedBatch: {
+        path: "POST /render-enhanced-batch",
+        description: "Batch render with CSS integration",
+        example: {
+          variations: [
+            { id: "enhanced1", ...enhancedVariationExample },
+            { id: "enhanced2", ...enhancedVariationExample }
+          ]
+        }
       }
     },
-    note: "Service supports both TSX components and HTML variation rendering!"
+    cssIntegrationOptions: {
+      enableDesignIntelligence: "Analyze design quality and brand elements",
+      useCriticalCSSOnly: "Extract only above-fold CSS for faster rendering",
+      preserveBrandElements: "Maintain brand fonts, colors, and logos",
+      optimizeForThumbnails: "Optimize CSS for thumbnail generation"
+    },
+    note: "Enhanced service with CSS data integration for brand-aware thumbnail generation!"
   });
 });
 
