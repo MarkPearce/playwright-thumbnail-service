@@ -9,6 +9,7 @@ import {
   renderEnhancedComparison, 
   renderEnhancedBatch 
 } from './enhanced-variation-renderer.js';
+import { extractComputedStyles } from './computed-styles-extractor-simple.js';
 import type { ThumbnailOptions } from './types.js';
 
 const app = express();
@@ -445,6 +446,52 @@ app.post('/render-enhanced-batch', async (req, res): Promise<void> => {
   }
 });
 
+// NEW: Computed styles extraction endpoint
+app.post('/extract-computed-styles', async (req, res): Promise<void> => {
+  try {
+    const { html, url, options = {} } = req.body;
+    
+    if (!html || !url) {
+      res.status(400).json({ 
+        error: 'Missing required fields',
+        message: 'Both html and url are required'
+      });
+      return;
+    }
+    
+    console.log('Computed styles extraction request received:', { 
+      url,
+      htmlLength: html.length,
+      options 
+    });
+    
+    // Extract computed styles
+    const result = await extractComputedStyles({
+      html,
+      url,
+      options
+    });
+    
+    if (!result.success) {
+      res.status(500).json({ 
+        error: 'Failed to extract computed styles',
+        message: result.error || 'Unknown error'
+      });
+      return;
+    }
+    
+    // Return the computed styles data
+    res.json(result);
+    
+  } catch (error) {
+    console.error('Error extracting computed styles:', error);
+    res.status(500).json({ 
+      error: 'Failed to extract computed styles',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // Example endpoint to show usage
 app.get('/example', (_req, res) => {
   const exampleRequest = {
@@ -602,6 +649,52 @@ export default function ExampleSlide({ title, subtitle, content }: SlideProps) {
             { id: "enhanced1", ...enhancedVariationExample },
             { id: "enhanced2", ...enhancedVariationExample }
           ]
+        }
+      },
+      
+      // NEW: Computed styles extraction
+      computedStyles: {
+        path: "POST /extract-computed-styles",
+        description: "Extract computed styles from HTML using Playwright to get actual rendered values",
+        example: {
+          html: "<html><body><h1 style='font-family: Arial'>Hello World</h1></body></html>",
+          url: "https://example.com",
+          options: {
+            viewport: { width: 1920, height: 1080 },
+            waitForFonts: true,
+            includeAll: false,
+            maxElements: 100
+          }
+        },
+        response: {
+          success: true,
+          data: {
+            elements: [
+              {
+                selector: "h1",
+                tagName: "h1",
+                fontFamily: "Arial, sans-serif",
+                fontSize: "32px",
+                color: "rgb(0, 0, 0)",
+                // ... other computed properties
+              }
+            ],
+            summary: {
+              totalElements: 1,
+              uniqueFonts: ["Arial, sans-serif"],
+              uniqueColors: ["rgb(0, 0, 0)"],
+              primaryFont: "Arial, sans-serif",
+              primaryColor: "rgb(0, 0, 0)",
+              backgroundColor: "rgba(0, 0, 0, 0)"
+            },
+            cssVariables: {},
+            metadata: {
+              url: "https://example.com",
+              timestamp: "2025-07-18T19:00:00.000Z",
+              processingTime: 250,
+              viewport: { width: 1920, height: 1080 }
+            }
+          }
         }
       }
     },
