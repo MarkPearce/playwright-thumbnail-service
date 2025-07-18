@@ -47,6 +47,7 @@ export interface EnhancedVariationRenderRequest {
   modifiedHtml: string;
   originalHtml?: string;
   referencePageId?: string;
+  cssData?: any; // CSS data passed directly from our Supabase function
   options?: EnhancedVariationRenderOptions;
 }
 
@@ -66,6 +67,7 @@ export async function renderEnhancedVariation(
   const {
     modifiedHtml,
     referencePageId,
+    cssData,
     options = {}
   } = request;
 
@@ -90,15 +92,44 @@ export async function renderEnhancedVariation(
 
     let processedCSS: ProcessedCSSData | null = null;
 
-    // Fetch and process CSS data if reference page ID is provided
-    if (referencePageId) {
+    // Process CSS data if provided directly or fetch via reference page ID
+    if (cssData) {
       try {
-        const cssService = CSSIntegrationService.getInstance();
-        const cssData = await cssService.fetchCSSData(referencePageId);
+        console.log(`[EnhancedRenderer] Processing CSS data passed directly from Supabase`);
         
-        if (cssData) {
-          console.log(`[EnhancedRenderer] Processing CSS data for reference page: ${referencePageId}`);
-          
+        const cssService = CSSIntegrationService.getInstance();
+        
+        // Set default CSS integration options
+        const defaultCSSOptions: CSSIntegrationOptions = {
+          enableDesignIntelligence: true,
+          useCriticalCSSOnly: false,
+          preserveBrandElements: true,
+          optimizeForThumbnails: true,
+          ...cssIntegration
+        };
+
+        processedCSS = await cssService.processCSSForThumbnail(
+          cssData,
+          modifiedHtml,
+          defaultCSSOptions
+        );
+
+        console.log(`[EnhancedRenderer] CSS processing completed:`, {
+          combinedCSSLength: processedCSS.combinedCSS.length,
+          brandCSSLength: processedCSS.brandCSS.length,
+          qualityScore: processedCSS.designIntelligence?.qualityScore || 'N/A'
+        });
+      } catch (error) {
+        console.warn(`[EnhancedRenderer] CSS integration failed, continuing without it:`, error);
+      }
+    } else if (referencePageId) {
+      try {
+        console.log(`[EnhancedRenderer] Fetching CSS data for reference page: ${referencePageId}`);
+        
+        const cssService = CSSIntegrationService.getInstance();
+        const fetchedCssData = await cssService.fetchCSSData(referencePageId);
+        
+        if (fetchedCssData) {
           // Set default CSS integration options
           const defaultCSSOptions: CSSIntegrationOptions = {
             enableDesignIntelligence: true,
@@ -109,7 +140,7 @@ export async function renderEnhancedVariation(
           };
 
           processedCSS = await cssService.processCSSForThumbnail(
-            cssData,
+            fetchedCssData,
             modifiedHtml,
             defaultCSSOptions
           );
