@@ -44,7 +44,7 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
     if (imageProps.caption && shouldShowCaption) {
       return (
         <figure className={content.media.figure.container} data-media-figure>
-          <div className="relative w-full h-full overflow-hidden rounded shadow">
+          <div className={`relative w-full h-full overflow-hidden ${content.media.frame}`}>
             <img 
               src={imageProps.url} 
               alt={imageProps.alt || 'Media content'}
@@ -63,7 +63,7 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
       // No caption, render as simple image wrapper
       return (
         <div className={content.media.figure.container} data-media-wrapper>
-          <div className="relative w-full h-full overflow-hidden rounded shadow">
+          <div className={`relative w-full h-full overflow-hidden ${content.media.frame}`}>
             <img 
               src={imageProps.url} 
               alt={imageProps.alt || 'Media content'}
@@ -149,9 +149,8 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
           className="prose prose-sm max-w-none"
           dangerouslySetInnerHTML={{ __html: tableProps.htmlContent }}
           style={{
-            // Custom table styling to ensure readability
-            '--tw-prose-th-color': '#374151',
-            '--tw-prose-td-color': '#4b5563',
+            '--tw-prose-th-color': '#334155',
+            '--tw-prose-td-color': '#475569',
           } as any}
         />
         {tableProps.caption && (

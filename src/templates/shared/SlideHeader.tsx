@@ -1,3 +1,5 @@
+import { typography } from './slideStyles.js';
+
 interface SlideHeaderProps {
   title: string;
   subtitle?: string;
@@ -12,7 +14,7 @@ export const SlideHeader = ({
   className = ""
 }: SlideHeaderProps) => {
   return (
-    <div className={`flex flex-col justify-start items-start ${className}`} data-slide-header>
+    <div className={`flex flex-col ${className}`} data-slide-header>
       {showLogo && (
         <div className="mb-2 md:mb-4 lg:mb-6" data-logo-container>
           {/* Logo placeholder - can be replaced with actual logo component */}
@@ -22,12 +24,12 @@ export const SlideHeader = ({
         </div>
       )}
       
-      <div className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black text-cyan-600 leading-tight py-2" data-slide-title>
+      <div className={`${typography.header.title.base} ${typography.header.title.responsive} py-1`} data-slide-title>
         {title}
       </div>
-      
+
       {subtitle && (
-        <div className="text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-3xl font-medium text-slate-500 mb-4" data-slide-subtitle>
+        <div className={`${typography.header.subtitle.base} ${typography.header.subtitle.responsive} mt-1 md:mt-2`} data-slide-subtitle>
           {subtitle}
         </div>
       )}

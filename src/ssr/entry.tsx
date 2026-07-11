@@ -103,10 +103,6 @@ export function renderTemplate(options: SSRRenderOptions): string {
         -moz-osx-font-smoothing: grayscale;
       }
       
-      /* Slide-specific styles */
-      .slide-title {
-        font-family: 'Lora', serif;
-      }
     </style>
   </head>
   <body>

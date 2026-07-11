@@ -1,5 +1,6 @@
 import { ResolvedColumnContent, ResolvedContentItem, MediaItem, AdditionalMediaItem } from '../../types/slide';
 import { MediaRenderer } from './MediaRenderer.js';
+import { content } from './slideStyles.js';
 // Simple markdown parser replacement
 const parseMarkdown = (text: string) => {
   return <div dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br>') }} />;
@@ -22,15 +23,15 @@ export const ContentRenderer = ({
     switch (item.type) {
       case 'keypoint':
         return (
-          <li key={`keypoint-${index}`} className="flex items-start space-x-3" data-bullet-list-item>
-            <p className="flex-shrink-0 text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-cyan-600">•</p>
-            <span className="flex-1 text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-bold text-gray-800 leading-relaxed lg:leading-tight">{item.content as string}</span>
+          <li key={`keypoint-${index}`} className={content.keypoint.item} data-bullet-list-item>
+            <span className={content.keypoint.bullet} aria-hidden="true" />
+            <span className={content.keypoint.text}>{item.content as string}</span>
           </li>
         );
-      
+
       case 'detail':
         return (
-          <div key={`detail-${index}`} className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-medium text-gray-800 leading-relaxed lg:leading-tight" data-detail>
+          <div key={`detail-${index}`} className={content.detail} data-detail>
             {parseMarkdown(item.content as string)}
           </div>
         );
@@ -62,7 +63,7 @@ export const ContentRenderer = ({
       // Render key points as bullet list
       if (keyPoints.length > 0) {
         contentElements.push(
-          <ul key="keypoints" className="space-y-2" data-bullet-list-container>
+          <ul key="keypoints" className={content.keypoint.list} data-bullet-list-container>
             {keyPoints.map((item, index) => renderContentItem(item, index))}
           </ul>
         );
@@ -104,7 +105,7 @@ export const ContentRenderer = ({
     }
 
     return (
-      <div>
+      <div className="space-y-4">
         {contentElements}
       </div>
     );

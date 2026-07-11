@@ -49,8 +49,8 @@ export const LogoCard: TemplateDefinition = {
     return (
       <SlideContainer>
         <div className="flex-1 flex flex-col justify-center items-center" style={{ backgroundColor: background_color }}>
-          {logo && <LogoContainer src={logo} alt="Logo" className="w-12 h-12 md:w-16 md:h-16 mb-3 md:mb-4" />}
-          <SlideHeader title={title || ''} subtitle={subtitle} className="text-center" />
+          {logo && <LogoContainer src={logo} alt="Logo" position="center" className="w-14 h-14 md:w-20 md:h-20 lg:w-24 lg:h-24 mb-4 md:mb-6" />}
+          <SlideHeader title={title || ''} subtitle={subtitle} className="items-center text-center" />
         </div>
       </SlideContainer>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { typography } from './slideStyles.js';
 
 interface SlideTitleProps {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ export const SlideTitle: React.FC<SlideTitleProps> = ({
   if (!children) return null;
   
   return (
-    <h1 className={`text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black text-cyan-600 leading-tight py-2 mb-4 text-balance ${className}`}>
+    <h1 className={`${typography.header.title.base} ${typography.header.title.responsive} py-1 mb-4 ${className}`}>
       {children}
     </h1>
   );

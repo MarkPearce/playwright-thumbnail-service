@@ -1,4 +1,5 @@
 import React from 'react';
+import { typography } from './slideStyles.js';
 
 interface SlideSubtitleProps {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ export const SlideSubtitle: React.FC<SlideSubtitleProps> = ({
   if (!children) return null;
   
   return (
-    <p className={`text-lg md:text-xl lg:text-xl xl:text-2xl 2xl:text-3xl font-medium text-slate-500 mb-4 text-balance ${className}`}>
+    <p className={`${typography.header.subtitle.base} ${typography.header.subtitle.responsive} mb-4 ${className}`}>
       {children}
     </p>
   );

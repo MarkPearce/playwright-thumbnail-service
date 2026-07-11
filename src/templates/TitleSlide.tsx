@@ -1,5 +1,6 @@
 import { TemplateDefinition, TitleSlideProps } from './types.js';
 import { SlideContainer, ImageContainer } from './shared/index.js';
+import { typography } from './shared/slideStyles.js';
 
 export const TitleSlide: TemplateDefinition = {
   id: 'title_slide',
@@ -58,21 +59,21 @@ export const TitleSlide: TemplateDefinition = {
           objectPosition="center"
         />
       )}
-      <div className="flex flex-col items-center justify-center flex-1 text-center px-12">
-        <h1 className="font-black text-cyan-600 leading-tight text-balance text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl mb-8">
+      <div className="flex flex-col items-center justify-center flex-1 text-center px-6 md:px-12">
+        <h1 className={`${typography.titleSlide.title.base} ${typography.titleSlide.title.responsive} mb-4 md:mb-6`}>
           {title}
         </h1>
         {subtitle && (
-          <h2 className="font-medium text-slate-500 text-balance text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl">
+          <h2 className={`${typography.titleSlide.subtitle.base} ${typography.titleSlide.subtitle.responsive}`}>
             {subtitle}
           </h2>
         )}
       </div>
       {(author || organization) && (
-        <div className="flex justify-center md:justify-end items-end pb-12">
-          <div className="p-3 md:p-4 bg-white/75 rounded-lg flex flex-col gap-2 md:gap-3">
-            {author && <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{author}</div>}
-            {organization && <div className="text-slate-500 text-lg md:text-2xl font-bold font-lato">{organization}</div>}
+        <div className="flex justify-center md:justify-end items-end pb-6 md:pb-12">
+          <div className="px-4 py-3 md:px-5 md:py-4 bg-white/85 rounded-lg flex flex-col gap-1">
+            {author && <div className="text-slate-700 text-base md:text-xl font-bold">{author}</div>}
+            {organization && <div className="text-slate-500 text-base md:text-xl font-normal">{organization}</div>}
           </div>
         </div>
       )}
