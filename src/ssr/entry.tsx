@@ -95,6 +95,10 @@ export function renderTemplate(options: SSRRenderOptions): string {
       #root {
         width: 100%;
         height: 100%;
+        /* The size container the slide's fluid root font-size (cqw/cqh) resolves
+           against. Body is hard-set to the requested width/height above, so this
+           box never depends on its own contents. */
+        container-type: size;
       }
       
       /* Ensure proper font rendering */

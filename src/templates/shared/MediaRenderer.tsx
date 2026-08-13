@@ -48,8 +48,7 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
             <img 
               src={imageProps.url} 
               alt={imageProps.alt || 'Media content'}
-              className="w-full h-full object-cover"
-              style={{ objectPosition: 'center' }}
+              className="w-full h-full object-contain"
               data-media-image
               onError={handleImageError}
             />
@@ -67,8 +66,7 @@ export const MediaRenderer = ({ media }: MediaRendererProps) => {
             <img 
               src={imageProps.url} 
               alt={imageProps.alt || 'Media content'}
-              className="w-full h-full object-cover"
-              style={{ objectPosition: 'center' }}
+              className="w-full h-full object-contain"
               data-media-image
               onError={handleImageError}
             />

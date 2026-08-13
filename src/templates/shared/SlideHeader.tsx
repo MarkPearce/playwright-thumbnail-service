@@ -24,12 +24,13 @@ export const SlideHeader = ({
         </div>
       )}
       
-      <div className={`${typography.header.title.base} ${typography.header.title.responsive} py-1`} data-slide-title>
+      {/* line-clamp brings overflow:hidden with it; the padding keeps descenders off the clip edge */}
+      <div className={`${typography.header.title.base} ${typography.header.title.responsive} py-[0.06em]`} data-slide-title>
         {title}
       </div>
 
       {subtitle && (
-        <div className={`${typography.header.subtitle.base} ${typography.header.subtitle.responsive} mt-1 md:mt-2`} data-slide-subtitle>
+        <div className={`${typography.header.subtitle.base} ${typography.header.subtitle.responsive} mt-[0.3em]`} data-slide-subtitle>
           {subtitle}
         </div>
       )}

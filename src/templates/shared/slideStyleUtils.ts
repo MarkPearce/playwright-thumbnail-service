@@ -1,7 +1,8 @@
-import { 
-  container, 
-  grid, 
-  editor 
+import {
+  container,
+  grid,
+  column,
+  editor
 } from './slideStyles.js';
 
 // ============================================================================
@@ -26,11 +27,10 @@ export const getColumnEditingClasses = (columnNumber: number, className = '') =>
   return `${editor.editingOutline} ${outlineColor} ${className}`;
 };
 
-// Template utility functions for centralized styling
-export const getSlideHeaderClasses = () => {
-  return 'flex flex-col justify-start items-start';
+export const getSlideColumnClasses = () => {
+  return column.base;
 };
 
-export const getSlideColumnClasses = () => {
-  return 'flex-1 flex flex-col space-y-6 p-3 relative';
+export const getColumnContentClasses = () => {
+  return column.content;
 };

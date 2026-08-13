@@ -1,7 +1,6 @@
 interface LogoContainerProps {
   src: string;
   alt?: string;
-  size?: 'small' | 'medium' | 'large';
   position?: 'top-left' | 'top-right' | 'center' | 'bottom-left' | 'bottom-right';
   className?: string;
 }
@@ -9,17 +8,10 @@ interface LogoContainerProps {
 export const LogoContainer = ({ 
   src, 
   alt = 'Logo',
-  size = 'medium',
   position = 'top-right',
   className = '' 
 }: LogoContainerProps) => {
   if (!src) return null;
-  
-  const sizeClasses = {
-    small: 'w-16 h-16',
-    medium: 'w-24 h-24',
-    large: 'w-32 h-32'
-  };
   
   const positionClasses = {
     'top-left': 'absolute top-4 left-4',
@@ -34,7 +26,7 @@ export const LogoContainer = ({
       <img 
         src={src} 
         alt={alt}
-        className={`${sizeClasses[size]} object-contain`}
+        className="w-full h-full object-contain"
       />
     </div>
   );

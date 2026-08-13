@@ -1,6 +1,7 @@
 import { ResolvedColumnContent, ResolvedContentItem, MediaItem, AdditionalMediaItem } from '../../types/slide';
 import { MediaRenderer } from './MediaRenderer.js';
 import { content } from './slideStyles.js';
+import { getColumnContentClasses } from './slideStyleUtils.js';
 // Simple markdown parser replacement
 const parseMarkdown = (text: string) => {
   return <div dangerouslySetInnerHTML={{ __html: text.replace(/\n/g, '<br>') }} />;
@@ -105,7 +106,7 @@ export const ContentRenderer = ({
     }
 
     return (
-      <div className="space-y-4">
+      <div className={getColumnContentClasses()}>
         {contentElements}
       </div>
     );

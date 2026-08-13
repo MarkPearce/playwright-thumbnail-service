@@ -60,7 +60,7 @@ export const TitleSlide: TemplateDefinition = {
         />
       )}
       <div className="flex flex-col items-center justify-center flex-1 text-center px-6 md:px-12">
-        <h1 className={`${typography.titleSlide.title.base} ${typography.titleSlide.title.responsive} mb-4 md:mb-6`}>
+        <h1 className={`${typography.titleSlide.title.base} ${typography.titleSlide.title.responsive} mb-[0.25em]`}>
           {title}
         </h1>
         {subtitle && (
@@ -72,8 +72,8 @@ export const TitleSlide: TemplateDefinition = {
       {(author || organization) && (
         <div className="flex justify-center md:justify-end items-end pb-6 md:pb-12">
           <div className="px-4 py-3 md:px-5 md:py-4 bg-white/85 rounded-lg flex flex-col gap-1">
-            {author && <div className="text-slate-700 text-base md:text-xl font-bold">{author}</div>}
-            {organization && <div className="text-slate-500 text-base md:text-xl font-normal">{organization}</div>}
+            {author && <div className="text-slate-700 text-[1.15em] font-bold">{author}</div>}
+            {organization && <div className="text-slate-500 text-[1.15em] font-normal">{organization}</div>}
           </div>
         </div>
       )}
