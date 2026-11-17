@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright:v1.53.2-jammy
+FROM mcr.microsoft.com/playwright:v1.64.1-noble
 
 WORKDIR /app
 
@@ -18,5 +18,6 @@ RUN npm prune --production
 # Expose port
 EXPOSE 3001
 
-# Run the service
+# Run unprivileged; the image ships pwuser for this.
+USER pwuser
 CMD ["node", "dist/server.js"]

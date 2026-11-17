@@ -53,6 +53,7 @@ curl http://localhost:3001/health
 ```bash
 curl -X POST http://localhost:3001/thumbnail/template \
   -H "Content-Type: application/json" \
+  -H "x-service-token: $SERVICE_TOKEN" \
   -d '{
     "templateId": "two_column",
     "props": {
@@ -129,11 +130,10 @@ For complete API documentation including all endpoints, template types, and exam
 
 ### Key Endpoints
 
-- `GET /health` - Service health check
-- `POST /thumbnail/template` - Template-based rendering (recommended)
-- `POST /thumbnail` - Direct component rendering
-- `POST /render-variation` - CRO variation rendering
-- `POST /render-comparison` - Side-by-side comparisons
+- `GET /health` - Service health check (no token)
+- `POST /thumbnail/template` - Template-based rendering
+
+Every route except `/health` requires the `x-service-token` header to match `SERVICE_TOKEN`. Without `SERVICE_TOKEN` set, the service refuses all render requests with 503. Renders may load public `http(s)` resources only; requests to loopback, private, link-local and metadata addresses are blocked.
 
 ## 🐳 Deployment
 
@@ -160,6 +160,7 @@ The service is deployed and ready for production use. See deployment guides:
 ```bash
 NODE_ENV=production
 PORT=3001
+SERVICE_TOKEN=<shared secret; the generate-thumbnail Edge Function sends it>
 ```
 
 ## 🏗️ Architecture

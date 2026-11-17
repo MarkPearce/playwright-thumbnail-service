@@ -6,14 +6,10 @@ The Playwright Thumbnail Service generates high-quality PNG/JPEG/WebP thumbnails
 
 - **Base URL**: `http://localhost:3001` (development)
 - **Production**: Deploy to Render.com or any Docker-compatible platform
-- **Authentication**: None required
+- **Authentication**: `x-service-token` header matching the `SERVICE_TOKEN` environment variable, on every route except `/health`
 - **Content-Type**: `application/json` for requests, `image/*` for responses
 
 - Health check: `http://localhost:3001/health`
-
-- Example usage: `http://localhost:3001/example`
-
-- Main thumbnail endpoint: `POST /thumbnail`
 
 - Template endpoint: `POST /thumbnail/template`
 
@@ -60,20 +56,6 @@ POST /thumbnail/template
 ```
 
 **Response:** Binary image data with appropriate `Content-Type` header
-
-### 3. Direct Component Rendering (Legacy)
-```
-POST /thumbnail
-```
-
-**Request Body:**
-```json
-{
-  "component": "// TSX component code as string",
-  "props": { ... },
-  "options": { ... }
-}
-```
 
 ---
 
